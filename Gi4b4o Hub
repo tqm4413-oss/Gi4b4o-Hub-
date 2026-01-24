@@ -1,0 +1,88 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Gi4b4o Hub 🐱🌈 | Shawarma Kiosk",
+   LoadingTitle = "Đang tải cấu hình...",
+   LoadingSubtitle = "by Gemini",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Gi4b4oHub", 
+      FileName = "ShawarmaConfig"
+   }
+})
+
+-- Variables
+local AutoCook = false
+local AutoServe = false
+
+-- Tab chính
+local MainTab = Window:CreateTab("🏠 Chính", 4483362458) -- Icon ID
+
+MainTab:CreateSection("Tự động hóa")
+
+MainTab:CreateToggle({
+   Name = "Auto Cook (Tự nấu bánh)",
+   CurrentValue = false,
+   Flag = "ToggleCook",
+   Callback = function(Value)
+      AutoCook = Value
+      if Value then
+          Rayfield:Notify({Title = "Thông báo", Content = "Đã bật Auto Cook!", Duration = 2})
+          -- Vòng lặp xử lý logic Cook ở đây
+          spawn(function()
+              while AutoCook do
+                  -- Logic: Tìm nguyên liệu -> Cho vào máy -> Đợi chín
+                  task.wait(1)
+              end
+          end)
+      end
+   end,
+})
+
+MainTab:CreateToggle({
+   Name = "Auto Serve (Tự phục vụ)",
+   CurrentValue = false,
+   Flag = "ToggleServe",
+   Callback = function(Value)
+      AutoServe = Value
+      if Value then
+          Rayfield:Notify({Title = "Thông báo", Content = "Đã bật Auto Serve!", Duration = 2})
+          spawn(function()
+              while AutoServe do
+                  -- Logic: Lấy bánh -> Đưa cho khách
+                  task.wait(1)
+              end
+          end)
+      end
+   end,
+})
+
+-- Tab Nâng cấp & Nhân vật
+local PlayerTab = Window:CreateTab("⚡ Nhân vật", 4483362458)
+
+PlayerTab:CreateSlider({
+   Name = "Tốc độ chạy",
+   Range = {16, 150},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "SliderSpeed",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+PlayerTab:CreateButton({
+   Name = "Nhận Full Tiền (Giả lập)",
+   Callback = function()
+       -- Lưu ý: Hack tiền thật thường bị fix nhanh, đây là ví dụ event
+       Rayfield:Notify({Title = "Lỗi", Content = "Chức năng này cần Bypass đặc biệt!", Duration = 3})
+   end,
+})
+
+-- Tab Thông tin
+local InfoTab = Window:CreateTab("ℹ️ Thông tin", 4483362458)
+
+InfoTab:CreateParagraph({Title = "Gi4b4o Hub 🐱🌈", Content = "Phiên bản: 1.0\nTác giả: Gi4b4o & Gemini\nChúc bạn chơi game vui vẻ!"})
+
+Rayfield:LoadConfiguration()
