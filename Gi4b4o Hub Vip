@@ -1,0 +1,104 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Gi4b4o Hub 🐱🌈 | A Long Hike 🏔️",
+   LoadingTitle = "Đang kiểm tra bảo mật...",
+   LoadingSubtitle = "by Gemini",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Gi4b4oALongHike",
+      FileName = "Config"
+   },
+   KeySystem = true,
+   KeySettings = {
+      Title = "Gi4b4o Hub 🐱🌈 Key System",
+      Subtitle = "Hệ thống bảo mật",
+      Note = "lấy key ở discord của mình\nhttps://discord.gg/UuhNFgvfu", -- Link nằm ngay bên dưới chữ
+      FileName = "Gi4b4oKey", 
+      SaveKey = true, 
+      GrabKeyFromSite = false, 
+      Key = {"ButWhenIII"} -- Key đã được đổi theo ý bạn
+   }
+})
+
+-- Thông báo khi khởi động
+Rayfield:Notify({
+    Title = "Hệ Thống Đã Sẵn Sàng",
+    Content = "Nhận key tại: https://discord.gg/UuhNFgvfu",
+    Duration = 10,
+    Image = 4483362458,
+    Actions = {
+        Ignore = {
+            Name = "Copy Discord Link",
+            Callback = function()
+                setclipboard("https://discord.gg/UuhNFgvfu")
+                Rayfield:Notify({Title = "Thông báo", Content = "Đã copy link Discord!", Duration = 2})
+            end
+        },
+    },
+})
+
+-- TAB CHÍNH: HIKING
+local MainTab = Window:CreateTab("🏔️ Leo Núi", 4483362458)
+
+MainTab:CreateSection("Tính Năng Hỗ Trợ")
+
+MainTab:CreateToggle({
+   Name = "Infinite Stamina (Vô hạn thể lực)",
+   CurrentValue = false,
+   Flag = "InfStamina",
+   Callback = function(Value)
+      _G.InfStamina = Value
+      spawn(function()
+          while _G.InfStamina do
+              pcall(function()
+                  -- Logic stamina tùy thuộc vào cấu trúc game
+                  local char = game.Players.LocalPlayer.Character
+                  if char:FindFirstChild("Stamina") then
+                      char.Stamina.Value = 100
+                  end
+              end)
+              task.wait(0.5)
+          end
+      end)
+   end,
+})
+
+-- TAB NHÂN VẬT
+local PlayerTab = Window:CreateTab("⚡ Nhân Vật", 4483362458)
+
+PlayerTab:CreateSlider({
+   Name = "Tốc độ di chuyển",
+   Range = {16, 300},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "WS",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+PlayerTab:CreateButton({
+   Name = "Infinite Jump (Nhảy vô hạn)",
+   Callback = function()
+       game:GetService("UserInputService").JumpRequest:Connect(function()
+           game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+       end)
+   end,
+})
+
+-- TAB THÔNG TIN & DISCORD
+local InfoTab = Window:CreateTab("ℹ️ Thông Tin", 4483362458)
+
+InfoTab:CreateSection("Liên hệ tác giả")
+
+InfoTab:CreateButton({
+   Name = "Copy Link Discord: https://discord.gg/UuhNFgvfu",
+   Callback = function()
+       setclipboard("https://discord.gg/UuhNFgvfu")
+       Rayfield:Notify({Title = "Thành công", Content = "Đã copy link Discord!", Duration = 2})
+   end,
+})
+
+Rayfield:LoadConfiguration()
