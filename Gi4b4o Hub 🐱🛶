@@ -1,0 +1,111 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Gi4b4o Hub 🐱🌈 | Raft 101 Survival",
+   LoadingTitle = "Đang kiểm tra bảo mật...",
+   LoadingSubtitle = "by Gemini",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Gi4b4oHub_Raft",
+      FileName = "Config"
+   },
+   KeySystem = true,
+   KeySettings = {
+      Title = "Gi4b4o Hub 🐱🌈 Key System",
+      Subtitle = "Hệ thống bảo mật",
+      Note = "lấy key ở discord của mình\nhttps://discord.gg/UuhNFgvfu", -- Thông báo và link ngay bên dưới
+      FileName = "Gi4b4oKey", 
+      SaveKey = true, 
+      GrabKeyFromSite = false, 
+      Key = {"GiaBaoSkibidiToiletKoBell"} -- Key mới của bạn ở đây
+   }
+})
+
+-- Thông báo khi vừa chạy Script
+Rayfield:Notify({
+    Title = "Chào mừng bạn!",
+    Content = "Nhận key tại: https://discord.gg/UuhNFgvfu",
+    Duration = 10,
+    Image = 4483362458,
+    Actions = {
+        Ignore = {
+            Name = "Copy Discord Link",
+            Callback = function()
+                setclipboard("https://discord.gg/UuhNFgvfu")
+                print("Đã copy link Discord!")
+            end
+        },
+    },
+})
+
+-- TAB CHÍNH: SURVIVAL
+local MainTab = Window:CreateTab("🌊 Survival", 4483362458)
+
+MainTab:CreateSection("Auto Features")
+
+MainTab:CreateToggle({
+   Name = "Auto Collect Items (Tự hút đồ)",
+   CurrentValue = false,
+   Flag = "AutoCollect",
+   Callback = function(Value)
+      _G.AutoCollect = Value
+      spawn(function()
+          while _G.AutoCollect do
+              pcall(function()
+                  for _, v in pairs(game.Workspace:GetChildren()) do
+                      if v:IsA("Part") and (v.Name == "Plank" or v.Name == "Plastic" or v.Name == "Leaf") then
+                          v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                      end
+                  end
+              end)
+              task.wait(0.5)
+          end
+      end)
+   end,
+})
+
+MainTab:CreateToggle({
+   Name = "Infinite Oxygen & Hunger",
+   CurrentValue = false,
+   Flag = "InfStats",
+   Callback = function(Value)
+      _G.God = Value
+      spawn(function()
+          while _G.God do
+              pcall(function()
+                  game.Players.LocalPlayer.Character.Values.Oxygen.Value = 100
+                  game.Players.LocalPlayer.Character.Values.Hunger.Value = 100
+              end)
+              task.wait(1)
+          end
+      end)
+   end,
+})
+
+-- TAB NHÂN VẬT
+local PlayerTab = Window:CreateTab("⚡ Player", 4483362458)
+
+PlayerTab:CreateSlider({
+   Name = "Tốc độ chạy",
+   Range = {16, 250},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "SpeedSlider",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+-- TAB THÔNG TIN
+local CreditTab = Window:CreateTab("🛡 Credits", 4483362458)
+
+CreditTab:CreateButton({
+   Name = "Copy Link Discord: https://discord.gg/UuhNFgvfu",
+   Callback = function()
+       setclipboard("https://discord.gg/UuhNFgvfu")
+       Rayfield:Notify({Title = "Đã Copy!", Content = "Link Discord đã được lưu!", Duration = 2})
+   end,
+})
+
+Rayfield:LoadConfiguration()
