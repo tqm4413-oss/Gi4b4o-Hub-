@@ -1,0 +1,120 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Gi4b4o Hub 🐱 | Evade Edition",
+   LoadingTitle = "Đang tải hệ thống...",
+   LoadingSubtitle = "by AnhGi4B4o",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Gi4b4oEvade",
+      FileName = "Config"
+   },
+   KeySystem = true, 
+   KeySettings = {
+      Title = "Gi4b4o Hub - Xác Thực",
+      Subtitle = "Nhận key ở discord của mình",
+      Note = "Link Discord: https://discord.gg/UuhNFgvfu",
+      FileName = "EvadeKey",
+      SaveKey = true,
+      Key = {"AnhGi4B4oDepzai"} 
+   }
+})
+
+-- Biến logic
+local InfiniteJumpEnabled = false
+local FullbrightEnabled = false
+local OldAmbient = game:GetService("Lighting").Ambient
+
+-- Tab Tính Năng Chính
+local MainTab = Window:CreateTab("Tính Năng ⚡", 4483362458)
+
+MainTab:CreateToggle({
+   Name = "Auto Revive (Tự cứu đồng đội)",
+   CurrentValue = false,
+   Callback = function(Value)
+      _G.AutoRevive = Value
+      task.spawn(function()
+         while _G.AutoRevive do
+            -- Code quét người chơi bị gục trong Evade
+            for _, v in pairs(game.Workspace.Players:GetChildren()) do
+               if v:FindFirstChild("Revive") and v.Name ~= game.Players.LocalPlayer.Name then
+                  local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                  if root and v:FindFirstChild("HumanoidRootPart") then
+                     root.CFrame = v.HumanoidRootPart.CFrame
+                  end
+               end
+            end
+            task.wait(0.5)
+         end
+      end)
+   end,
+})
+
+-- Tab Hiển Thị (Có Fullbright)
+local VisualTab = Window:CreateTab("Hiển Thị 👁️", 4483362458)
+
+VisualTab:CreateToggle({
+   Name = "Fullbright (Làm sáng bản đồ)",
+   CurrentValue = false,
+   Callback = function(Value)
+      FullbrightEnabled = Value
+      if FullbrightEnabled then
+         game:GetService("Lighting").Ambient = Color3.fromRGB(255, 255, 255)
+         game:GetService("Lighting").Brightness = 2
+         game:GetService("Lighting").ClockTime = 14
+      else
+         game:GetService("Lighting").Ambient = OldAmbient
+         game:GetService("Lighting").Brightness = 1
+      end
+   end,
+})
+
+-- Tab Di Chuyển
+local MoveTab = Window:CreateTab("Di Chuyển 🏃", 4483362458)
+
+MoveTab:CreateSlider({
+   Name = "Tốc độ chạy",
+   Range = {16, 300},
+   Increment = 5,
+   CurrentValue = 16,
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+MoveTab:CreateToggle({
+   Name = "Nhảy vô hạn (Infinite Jump)",
+   CurrentValue = false,
+   Callback = function(Value)
+      InfiniteJumpEnabled = Value
+   end,
+})
+
+-- Logic xử lý Infinite Jump
+game:GetService("UserInputService").JumpRequest:Connect(function()
+   if InfiniteJumpEnabled then
+      game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+   end
+end)
+
+-- Tab Thông Tin & Discord
+local InfoTab = Window:CreateTab("Thông Tin 🌐", 4483362458)
+
+InfoTab:CreateParagraph({
+   Title = "Nhận Key Tại Đây:", 
+   Content = "Link Discord: https://discord.gg/UuhNFgvfu"
+})
+
+InfoTab:CreateButton({
+   Name = "Sao chép Link Discord",
+   Callback = function()
+      setclipboard("https://discord.gg/UuhNFgvfu")
+      Rayfield:Notify({Title = "Thành công", Content = "Đã copy link!"})
+   end,
+})
+
+Rayfield:Notify({
+   Title = "Gi4b4o Hub Ready!",
+   Content = "Fullbright và Infinite Jump đã sẵn sàng.",
+   Duration = 5
+})
