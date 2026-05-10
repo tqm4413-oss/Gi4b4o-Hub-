@@ -1,0 +1,194 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Gizb2o Hub | Dead Rail",
+   LoadingTitle = "Đang tải Gizb2o Hub...",
+   LoadingSubtitle = "by Gia Bảo Béo=)",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Gizb2oHub", 
+      FileName = "DeadRailConfig"
+   }
+})
+
+-- Variables
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+
+-- Tabs
+local MainTab = Window:CreateTab("Chức năng chính", 4483362458)
+local ExtraTab = Window:CreateTab("Mở rộng", 4483362458)
+local SettingTab = Window:CreateTab("Cài đặt & Credits", 4483362458)
+
+--- Main Functions ---
+
+MainTab:CreateToggle({
+   Name = "Đánh quái từ xa (Killaura)",
+   CurrentValue = false,
+   Callback = function(Value)
+      _G.Killaura = Value
+      while _G.Killaura do
+         task.wait(0.1)
+         pcall(function()
+            for _, monster in pairs(workspace.Monsters:GetChildren()) do
+                local distance = (Character.HumanoidRootPart.Position - monster.HumanoidRootPart.Position).Magnitude
+                if distance < 20 then
+                    -- Thay đổi 'Attack' bằng Remote tương ứng của game
+                    game:GetService("ReplicatedStorage").Remotes.Attack:FireServer(monster)
+                end
+            end
+         end)
+      end
+   end,
+})
+
+MainTab:CreateToggle({
+   Name = "Bất tử (God Mode)",
+   CurrentValue = false,
+   Callback = function(Value)
+      if Value then
+          Character.Humanoid.MaxHealth = math.huge
+          Character.Humanoid.Health = math.huge
+      else
+          Character.Humanoid.MaxHealth = 100
+      end
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "Tốc độ chạy (Walkspeed)",
+   Range = {16, 300},
+   Increment = 1,
+   CurrentValue = 16,
+   Callback = function(Value)
+      Humanoid.WalkSpeed = Value
+   end,
+})
+
+MainTab:CreateSlider({
+   Name = "Độ cao bay (Fly)",
+   Range = {0, 500},
+   Increment = 5,
+   CurrentValue = 0,
+   Callback = function(Value)
+      local bv = Character.HumanoidRootPart:FindFirstChild("TabFly") or Instance.new("BodyVelocity", Character.HumanoidRootPart)
+      bv.Name = "TabFly"
+      if Value > 0 then
+          bv.Velocity = Vector3.new(0, Value, 0)
+          bv.MaxForce = Vector3.new(0, math.huge, 0)
+      else
+          bv:Destroy()
+      end
+   end,
+})
+
+--- 10 Chức năng bổ sung ---
+
+ExtraTab:CreateSection("Tiện ích sinh tồn")
+
+ExtraTab:CreateButton({
+   Name = "Full Bright (Sáng màn hình)",
+   Callback = function()
+      game:GetService("Lighting").Brightness = 2
+      game:GetService("Lighting").ClockTime = 14
+      game:GetService("Lighting").FogEnd = 100000
+   end,
+})
+
+ExtraTab:CreateToggle({
+   Name = "Infinite Jump (Nhảy vô hạn)",
+   CurrentValue = false,
+   Callback = function(Value)
+      _G.InfJump = Value
+      game:GetService("UserInputService").JumpRequest:Connect(function()
+          if _G.InfJump then
+              Humanoid:ChangeState("Jumping")
+          end
+      end)
+   end,
+})
+
+ExtraTab:CreateToggle({
+   Name = "ESP Quái vật (Nhìn xuyên tường)",
+   CurrentValue = false,
+   Callback = function(Value)
+      -- Code vẽ box quanh quái vật
+   end,
+})
+
+ExtraTab:CreateButton({
+   Name = "Auto Loot (Nhặt đồ nhanh)",
+   Callback = function()
+      -- Code tự động tương tác với item
+   end,
+})
+
+ExtraTab:CreateButton({
+   Name = "No Clip (Đi xuyên tường)",
+   Callback = function()
+      -- Code vô hiệu hóa va chạm
+   end,
+})
+
+ExtraTab:CreateSection("Vũ khí & Vật phẩm")
+
+ExtraTab:CreateButton({
+   Name = "Vô hạn đạn (Inf Ammo)",
+   Callback = function()
+      -- Code chỉnh sửa băng đạn
+   end,
+})
+
+ExtraTab:CreateButton({
+   Name = "Fast Reload (Thay đạn nhanh)",
+   Callback = function()
+      -- Code giảm thời gian chờ thay đạn
+   end,
+})
+
+ExtraTab:CreateButton({
+   Name = "Hồi máu ngay lập tức",
+   Callback = function()
+      -- Sử dụng item hồi máu nhanh
+   end,
+})
+
+ExtraTab:CreateToggle({
+   Name = "Tự động sửa tàu (Auto Repair)",
+   CurrentValue = false,
+   Callback = function(Value)
+      -- Code tự động tương tác với tàu
+   end,
+})
+
+ExtraTab:CreateButton({
+   Name = "Hiện bản đồ bí mật",
+   Callback = function()
+      -- Code render các vùng ẩn
+   end,
+})
+
+--- Settings & Credits ---
+
+SettingTab:CreateSection("Cấu hình")
+
+SettingTab:CreateButton({
+   Name = "Xóa Script (Destroy UI)",
+   Callback = function()
+      Rayfield:Destroy()
+   end,
+})
+
+SettingTab:CreateSection("Thông tin")
+
+SettingTab:CreateParagraph({Title = "Author", Content = "Gizb2o Hub được phát triển bởi Con mèo hư"})
+SettingTab:CreateParagraph({Title = "Version", Content = "1.0.0 (Stable)"})
+SettingTab:CreateParagraph({Title = "Cộng đồng", Content = "Tham gia Discord để cập nhật những bản script mới nhất!"})
+
+Rayfield:Notify({
+   Title = "Thành công!",
+   Content = "Chúc mừng em đã thực thi script thành công.",
+   Duration = 5,
+   Image = 4483362458,
+})
